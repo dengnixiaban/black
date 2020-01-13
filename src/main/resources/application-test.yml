@@ -1,0 +1,66 @@
+server:
+  port: 8882
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://172.18.14.82:3306/dx_dormitory_manage?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC    #mysql8
+    username: dxsoft
+    password: dxsoft
+    name: test
+    type: com.alibaba.druid.pool.DruidDataSource
+    initial-size: 5
+    min-idle: 5
+    max-active: 20
+    max-wait: 30000
+    time-between-eviction-runs-millis: 60000
+    min-evictable-idle-time-millis: 300000
+    validation-query: select '1' from dual
+    test-while-idle: true
+    test-on-borrow: false
+    test-on-return: false
+    pool-prepared-statements: true
+    max-open-prepared-statements: 20
+    max-pool-prepared-statement-per-connection-size: 20
+  redis:
+    host: 172.18.14.82
+    port: 6379
+    password: dxsoft
+    # 数据库索引 默认0
+    database: 15
+    jedis:
+      pool:
+        max-active: 5
+        max-idle: 5
+        min-idle: 1
+        max-wait: 2000ms
+  cache:
+    redis:
+      time-to-live: 600000
+      cache-null-values: false
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.dingxin.dormitorymanage.entity
+  global-config:
+    db-config:
+      logic-not-delete-value: 1
+      logic-delete-value: 0
+
+logging:
+  config: classpath:log-config/log4j2-dev.xml
+
+#jwt配置
+jwt:
+  id: gyskdatacagejwt
+  secret: 7786df7fc3a34e26a61c034d5ec8245d
+  refresh-interval: 3600000
+  refresh-ttl: 43200000
+  enable: true
+  ttl: 1800000
+#地图文件上传地址
+mapfile:
+  upload-path: /project/dormitory/upload
+nginx:
+  ip-port: http://172.18.14.82:8888
+user:
+  default-password: abc123
