@@ -1,48 +1,43 @@
 package com.hewei.black.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.hewei.black.entity.User;
-
+import com.hewei.black.common.BaseResult;
+import com.hewei.black.entity.UserRole;
 import com.hewei.black.query.BaseQuery;
-import com.hewei.black.service.IUserService;
+import com.hewei.black.service.IUserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
-
-
 import com.baomidou.mybatisplus.toolkit.CollectionUtils;
-import com.hewei.black.common.BaseResult;
-
 import java.util.Locale;
 
 /**
 * 
 */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/userRole")
 @Api(value = "接口")
-public class UserController {
+public class UserRoleController {
 
                 
-
+    @Autowired
+    private IUserRoleService iUserRoleService;
 
     @Autowired
     private MessageSource messageSource;
-    @Autowired
-    private IUserService iUserService;
+
     /**
      * 列表
      */
     @GetMapping
-    //@RequiresPermissions("user:list" )
+    //@RequiresPermissions("userRole:list" )
     @ApiOperation(value = "获取列表" )
-    public BaseResult<Page<User>>  list(BaseQuery baseQuery){
-        BaseResult<Page<User>> baseResult = new BaseResult<>();
+    public BaseResult<Page<UserRole>> list(BaseQuery baseQuery){
+        BaseResult<Page<UserRole>> baseResult = new BaseResult<>();
         //查询列表数据
         Page page=new Page(baseQuery.getCurrentPage(),baseQuery.getPageSize());
-        Page pageList=iUserService.selectPage(page,new EntityWrapper<User>());
+        Page pageList=iUserRoleService.selectPage(page,new EntityWrapper<UserRole>());
         if (CollectionUtils.isEmpty(pageList.getRecords())) {
             return baseResult.notFound();
         }
@@ -54,16 +49,16 @@ public class UserController {
      * 信息
      */
     @GetMapping("/{id}" )
-    //@RequiresPermissions("user:info" )
+    //@RequiresPermissions("userRole:info" )
     @ApiOperation(value = "获取详情信息" )
-    public BaseResult<User> info(@PathVariable("id" ) String id){
-        BaseResult<User> baseResult = new BaseResult<>();
+    public BaseResult<UserRole> info(@PathVariable("id" ) Integer id){
+        BaseResult<UserRole> baseResult = new BaseResult<>();
 
-        User user = iUserService.selectById(id);
-        if (user == null) {
+        UserRole userRole = iUserRoleService.selectById(id);
+        if (userRole == null) {
             return baseResult.notFound();
         }
-        baseResult.setData(user);
+        baseResult.setData(userRole);
         return baseResult;
     }
 
@@ -71,17 +66,17 @@ public class UserController {
      * 保存
      */
     @PostMapping
-    //@RequiresPermissions("user:save" )
+    //@RequiresPermissions("userRole:save" )
     @ApiOperation(value = "新增信息" )
-    public BaseResult save(@RequestBody  User user){
+    public BaseResult save(@RequestBody  UserRole userRole){
 
-        BaseResult<User> baseResult = new BaseResult<>();
+        BaseResult<UserRole> baseResult = new BaseResult<>();
 
-        boolean retFlag = iUserService.insert(user);
+        boolean retFlag = iUserRoleService.insert(userRole);
         if (!retFlag) {
             return baseResult.failed(messageSource.getMessage("10001", null, Locale.CHINESE));
         }
-        baseResult.setData(user);
+        baseResult.setData(userRole);
         return baseResult;
     }
 
@@ -89,16 +84,16 @@ public class UserController {
      * 修改
      */
     @PutMapping
-    //@RequiresPermissions("user:update" )
+    //@RequiresPermissions("userRole:update" )
     @ApiOperation(value = "修改信息" )
-    public BaseResult update(@RequestBody @PathVariable("user" ) User user){
-        BaseResult<User> baseResult = new BaseResult<>();
+    public BaseResult update(@RequestBody @PathVariable("userRole" ) UserRole userRole){
+        BaseResult<UserRole> baseResult = new BaseResult<>();
 
-        boolean retFlag = iUserService.updateById(user);
+        boolean retFlag = iUserRoleService.updateById(userRole);
         if (!retFlag) {
             return baseResult.failed(messageSource.getMessage("10001", null, Locale.CHINESE));
         }
-        baseResult.setData(user);
+        baseResult.setData(userRole);
         return baseResult;
     }
 
@@ -106,11 +101,11 @@ public class UserController {
      * 删除
      */
     @DeleteMapping("/{id}" )
-    //@RequiresPermissions("user:delete" )
+    //@RequiresPermissions("userRole:delete" )
     @ApiOperation(value = "删除信息" )
-    public BaseResult delete(@PathVariable("id" ) String id){
-        BaseResult<User> baseResult = new BaseResult<>();
-        boolean retFlag = iUserService.deleteById(id);
+    public BaseResult delete(@PathVariable("id" ) Integer id){
+        BaseResult<UserRole> baseResult = new BaseResult<>();
+        boolean retFlag = iUserRoleService.deleteById(id);
         if (!retFlag) {
             return baseResult.failed(messageSource.getMessage("10001", null, Locale.CHINESE));
         }

@@ -1,19 +1,18 @@
 package com.hewei.black.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.hewei.black.entity.User;
-
+import com.hewei.black.common.BaseResult;
+import com.hewei.black.entity.RoleMenu;
 import com.hewei.black.query.BaseQuery;
-import com.hewei.black.service.IUserService;
+import com.hewei.black.service.IRoleMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 
-
 import com.baomidou.mybatisplus.toolkit.CollectionUtils;
-import com.hewei.black.common.BaseResult;
+
 
 import java.util.Locale;
 
@@ -21,28 +20,28 @@ import java.util.Locale;
 * 
 */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/roleMenu")
 @Api(value = "接口")
-public class UserController {
+public class RoleMenuController {
 
                 
-
+    @Autowired
+    private IRoleMenuService iRoleMenuService;
 
     @Autowired
     private MessageSource messageSource;
-    @Autowired
-    private IUserService iUserService;
+
     /**
      * 列表
      */
     @GetMapping
-    //@RequiresPermissions("user:list" )
+    //@RequiresPermissions("roleMenu:list" )
     @ApiOperation(value = "获取列表" )
-    public BaseResult<Page<User>>  list(BaseQuery baseQuery){
-        BaseResult<Page<User>> baseResult = new BaseResult<>();
+    public BaseResult<Page<RoleMenu>> list(BaseQuery baseQuery){
+        BaseResult<Page<RoleMenu>> baseResult = new BaseResult<>();
         //查询列表数据
         Page page=new Page(baseQuery.getCurrentPage(),baseQuery.getPageSize());
-        Page pageList=iUserService.selectPage(page,new EntityWrapper<User>());
+        Page pageList=iRoleMenuService.selectPage(page,new EntityWrapper<RoleMenu>());
         if (CollectionUtils.isEmpty(pageList.getRecords())) {
             return baseResult.notFound();
         }
@@ -54,16 +53,16 @@ public class UserController {
      * 信息
      */
     @GetMapping("/{id}" )
-    //@RequiresPermissions("user:info" )
+    //@RequiresPermissions("roleMenu:info" )
     @ApiOperation(value = "获取详情信息" )
-    public BaseResult<User> info(@PathVariable("id" ) String id){
-        BaseResult<User> baseResult = new BaseResult<>();
+    public BaseResult<RoleMenu> info(@PathVariable("id" ) Integer id){
+        BaseResult<RoleMenu> baseResult = new BaseResult<>();
 
-        User user = iUserService.selectById(id);
-        if (user == null) {
+        RoleMenu roleMenu = iRoleMenuService.selectById(id);
+        if (roleMenu == null) {
             return baseResult.notFound();
         }
-        baseResult.setData(user);
+        baseResult.setData(roleMenu);
         return baseResult;
     }
 
@@ -71,17 +70,17 @@ public class UserController {
      * 保存
      */
     @PostMapping
-    //@RequiresPermissions("user:save" )
+    //@RequiresPermissions("roleMenu:save" )
     @ApiOperation(value = "新增信息" )
-    public BaseResult save(@RequestBody  User user){
+    public BaseResult save(@RequestBody  RoleMenu roleMenu){
 
-        BaseResult<User> baseResult = new BaseResult<>();
+        BaseResult<RoleMenu> baseResult = new BaseResult<>();
 
-        boolean retFlag = iUserService.insert(user);
+        boolean retFlag = iRoleMenuService.insert(roleMenu);
         if (!retFlag) {
             return baseResult.failed(messageSource.getMessage("10001", null, Locale.CHINESE));
         }
-        baseResult.setData(user);
+        baseResult.setData(roleMenu);
         return baseResult;
     }
 
@@ -89,16 +88,16 @@ public class UserController {
      * 修改
      */
     @PutMapping
-    //@RequiresPermissions("user:update" )
+    //@RequiresPermissions("roleMenu:update" )
     @ApiOperation(value = "修改信息" )
-    public BaseResult update(@RequestBody @PathVariable("user" ) User user){
-        BaseResult<User> baseResult = new BaseResult<>();
+    public BaseResult update(@RequestBody @PathVariable("roleMenu" ) RoleMenu roleMenu){
+        BaseResult<RoleMenu> baseResult = new BaseResult<>();
 
-        boolean retFlag = iUserService.updateById(user);
+        boolean retFlag = iRoleMenuService.updateById(roleMenu);
         if (!retFlag) {
             return baseResult.failed(messageSource.getMessage("10001", null, Locale.CHINESE));
         }
-        baseResult.setData(user);
+        baseResult.setData(roleMenu);
         return baseResult;
     }
 
@@ -106,11 +105,11 @@ public class UserController {
      * 删除
      */
     @DeleteMapping("/{id}" )
-    //@RequiresPermissions("user:delete" )
+    //@RequiresPermissions("roleMenu:delete" )
     @ApiOperation(value = "删除信息" )
-    public BaseResult delete(@PathVariable("id" ) String id){
-        BaseResult<User> baseResult = new BaseResult<>();
-        boolean retFlag = iUserService.deleteById(id);
+    public BaseResult delete(@PathVariable("id" ) Integer id){
+        BaseResult<RoleMenu> baseResult = new BaseResult<>();
+        boolean retFlag = iRoleMenuService.deleteById(id);
         if (!retFlag) {
             return baseResult.failed(messageSource.getMessage("10001", null, Locale.CHINESE));
         }
